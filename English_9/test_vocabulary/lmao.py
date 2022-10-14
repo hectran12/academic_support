@@ -1,4 +1,8 @@
 import os
+from random import random
+import pyttsx3
+
+localvoice = pyttsx3.init()
 def menu ():
     menu_choice = {
         1: 'Nhập từ phím',
@@ -9,9 +13,11 @@ def menu ():
     choice = input('Enter the number of choices: ').strip()
     return int(choice)
 
+
 def more_functions ():
     menu_choice = {
         1: 'Check ghi nhớ',
+        2: 'Check từ'
     }
     for x, y in menu_choice.items():
         print(x, '=>', y)
@@ -36,6 +42,29 @@ def checkList (listchar):
                     score += 1
     print('Your score is: ', str(score) + '/' + str(length))
 
+def checkTu (listchar):
+    repeat = int(input('Muốn lặp bao nhiêu lần: '))
+    askMode = input('Việt sang Anh ghi N, Anh sang Việt ghi A: ').lower()
+    for x in range(repeat):
+        os.system('cls')
+        print('Số lần: ' + str(x))
+        if askMode == 'n':
+            for x in listchar:
+                trans = x['trans']
+                print(trans + ' = ', end='')
+                
+                check = input().lower()
+                if x['char'].lower() == check:
+                    localvoice.say(check)
+                    localvoice.runAndWait()
+                    print('Đúng')
+        else:
+            for x in listchar:
+                char = x['char']
+                localvoice.say(char)
+                localvoice.runAndWait()
+                print(char + ' = ', end='')
+                check = input().lower()
 def getFirstCharList (listchar):
     listReturn = []
     for x in listchar:
@@ -84,9 +113,10 @@ elif choice == 2:
                 'trans': trans
             })
 sortChar(listGram)
-
 ask = input('Do you want use the more function? (y/n): ').lower()
 if ask == 'y':
     choice = more_functions()
     if choice == 1:
         checkList(listGram)
+    elif choice == 2:
+        checkTu(listGram)
